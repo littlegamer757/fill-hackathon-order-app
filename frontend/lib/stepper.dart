@@ -85,8 +85,7 @@ enum OrderState {
 }
 
 void start() async {
-  // String serverIp = "10.7.43.5";
-  String serverIp = "localhost";
+  String serverIp = "10.7.43.5";
   int serverPort = 4567;
 
   final socket = await Socket.connect(serverIp, serverPort);

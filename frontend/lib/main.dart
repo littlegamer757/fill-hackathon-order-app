@@ -2,12 +2,8 @@ import 'dart:async';
 
 import 'package:fill_hackathon/globals.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
-
-import 'order_process.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'ProductSans',
-        scaffoldBackgroundColor: Color.fromARGB(255, 203, 69, 95),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 203, 69, 95),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -39,8 +35,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with TickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _earlyAnimationController;
   late AnimationController _lateAnimationController;
@@ -49,29 +44,30 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void initState() {
-    _earlyAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
-    Timer(Duration(milliseconds: 1500),
-            () => _earlyAnimationController.forward());
+    _earlyAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
+    Timer(const Duration(milliseconds: 1500),
+        () => _earlyAnimationController.forward());
 
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
-    Timer(Duration(milliseconds: 2000), () => _animationController.forward());
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
+    Timer(const Duration(milliseconds: 2000),
+        () => _animationController.forward());
 
-    _lateAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    Timer(
-        Duration(milliseconds: 2600), () => _lateAnimationController.forward());
+    _lateAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    Timer(const Duration(milliseconds: 2600),
+        () => _lateAnimationController.forward());
 
-    _headerAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    Timer(Duration(milliseconds: 3200),
-            () => _headerAnimationController.forward());
+    _headerAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    Timer(const Duration(milliseconds: 3200),
+        () => _headerAnimationController.forward());
 
-    _filliHeaderAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    Timer(Duration(milliseconds: 3000),
-            () => _filliHeaderAnimationController.forward());
+    _filliHeaderAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    Timer(const Duration(milliseconds: 3000),
+        () => _filliHeaderAnimationController.forward());
 
     super.initState();
   }
@@ -94,22 +90,27 @@ class _MyHomePageState extends State<MyHomePage>
           Positioned(
             bottom: -200,
             child: SplashBackground(
-                animationController: _earlyAnimationController),
+              animationController: _earlyAnimationController,
+            ),
           ),
           Column(
             children: [
               Stack(
                 children: [
-                  TextHeaderSlider(animationController: _headerAnimationController),
-                  TextFilliSlider(animationController: _filliHeaderAnimationController),
+                  TextHeaderSlider(
+                    animationController: _headerAnimationController,
+                  ),
+                  TextFilliSlider(
+                    animationController: _filliHeaderAnimationController,
+                  ),
                 ],
               ),
               Expanded(
                 child: FilliSlider(animationController: _animationController),
               ),
-              ButtonSlider(animationController: _lateAnimationController)
+              ButtonSlider(animationController: _lateAnimationController),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -119,142 +120,143 @@ class _MyHomePageState extends State<MyHomePage>
 class TextHeaderSlider extends StatelessWidget {
   final AnimationController animationController;
 
-  TextHeaderSlider({
-    required this.animationController,
-  });
+  const TextHeaderSlider({super.key, required this.animationController});
 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0, -1),
-          end: Offset.zero,
-        ).animate(animationController),
-        child: Container(
-            margin: const EdgeInsets.only(left: 35, top: 100),
-            alignment: Alignment.centerLeft,
-            child: const Text('Get the newest ',
-                style: TextStyle(
-                    fontSize: 28, color: Color.fromARGB(255, 255, 208, 217)))));
+      position: Tween<Offset>(
+        begin: const Offset(0, -1),
+        end: Offset.zero,
+      ).animate(animationController),
+      child: Container(
+        margin: const EdgeInsets.only(left: 35, top: 100),
+        alignment: Alignment.centerLeft,
+        child: const Text(
+          'Get the newest ',
+          style: TextStyle(
+            fontSize: 28,
+            color: Color.fromARGB(255, 255, 208, 217),
+          ),
+        ),
+      ),
+    );
   }
 }
 
 class TextFilliSlider extends StatelessWidget {
   final AnimationController animationController;
 
-  TextFilliSlider({
-    required this.animationController,
-  });
+  const TextFilliSlider({super.key, required this.animationController});
 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0, -1),
-          end: Offset.zero,
-        ).animate(animationController),
-        child: Container(
-            margin: const EdgeInsets.only(left: 35, top: 132),
-            alignment: Alignment.centerLeft,
-            child: const Text(
-              'Filli Future ',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 40,
-              ),
-            )));
+      position: Tween<Offset>(
+        begin: const Offset(0, -1),
+        end: Offset.zero,
+      ).animate(animationController),
+      child: Container(
+        margin: const EdgeInsets.only(left: 35, top: 132),
+        alignment: Alignment.centerLeft,
+        child: const Text(
+          'Filli Future ',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+          ),
+        ),
+      ),
+    );
   }
 }
 
 class FilliSlider extends StatelessWidget {
   final AnimationController animationController;
 
-  FilliSlider({
-    required this.animationController,
-  });
+  const FilliSlider({super.key, required this.animationController});
 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0, 1.5),
-          end: Offset.zero,
-        ).animate(animationController),
-        child: Container(
-          alignment: Alignment.bottomCenter,
-          child: SvgPicture.asset(
-            'assets/BG-Filli.svg',
-            width: MediaQuery.of(context).size.width / 1.7,
-            fit: BoxFit.scaleDown,
-          ),
-        ));
+      position: Tween<Offset>(
+        begin: const Offset(0, 1.5),
+        end: Offset.zero,
+      ).animate(animationController),
+      child: Container(
+        alignment: Alignment.bottomCenter,
+        child: SvgPicture.asset(
+          'assets/BG-Filli.svg',
+          width: MediaQuery.of(context).size.width / 1.7,
+          fit: BoxFit.scaleDown,
+        ),
+      ),
+    );
   }
 }
 
 class ButtonSlider extends StatelessWidget {
   final AnimationController animationController;
 
-  ButtonSlider({
-    required this.animationController,
-  });
+  const ButtonSlider({super.key, required this.animationController});
 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0, 1),
-          end: Offset.zero,
-        ).animate(animationController),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 50.0, top: 25.0),
-          child: ElevatedButton.icon(
-            label: const Text(
-              'Order',
-              style: TextStyle(fontSize: 20),
-            ),
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28.0))),
-              backgroundColor: MaterialStateProperty.all<Color>(filliRed),
-            ).merge(ElevatedButton.styleFrom(minimumSize: const Size(150, 56))),
-            onPressed: () {},
-            icon: const Icon(
-              // <-- Icon
-              Icons.shopping_cart_outlined,
-              size: 26.0,
-            ),
+      position: Tween<Offset>(
+        begin: const Offset(0, 1),
+        end: Offset.zero,
+      ).animate(animationController),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 50.0, top: 25.0),
+        child: ElevatedButton.icon(
+          label: const Text(
+            'Order',
+            style: TextStyle(fontSize: 20),
           ),
-        ));
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28.0))),
+            backgroundColor: MaterialStateProperty.all<Color>(filliRed),
+          ).merge(ElevatedButton.styleFrom(minimumSize: const Size(150, 56))),
+          onPressed: () {},
+          icon: const Icon(
+            // <-- Icon
+            Icons.shopping_cart_outlined,
+            size: 26.0,
+          ),
+        ),
+      ),
+    );
   }
 }
 
 class SplashBackground extends StatelessWidget {
   final AnimationController animationController;
 
-  SplashBackground({
-    required this.animationController,
-  });
+  const SplashBackground({super.key, required this.animationController});
 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(0, 1),
+        begin: const Offset(0, 1),
         end: Offset.zero,
       ).animate(animationController),
       child: SimpleShadow(
-          opacity: 0.6,
-          color: Colors.black,
-          offset: Offset(5, 5),
-          sigma: 7,
-          child: SvgPicture.asset(
-            'assets/splash2.svg',
-            alignment: Alignment.bottomCenter,
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-          )),
+        opacity: 0.6,
+        color: Colors.black,
+        offset: const Offset(5, 5),
+        sigma: 7,
+        child: SvgPicture.asset(
+          'assets/splash2.svg',
+          alignment: Alignment.bottomCenter,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+        ),
+      ),
     );
   }
 }
