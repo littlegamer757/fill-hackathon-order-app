@@ -1,45 +1,20 @@
 import 'dart:async';
+import 'dart:collection';
 
-import 'package:fill_hackathon/globals.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 
-import 'order_process.dart';
+import 'globals.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class OrderProcessRoute extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Filli',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'ProductSans',
-        scaffoldBackgroundColor: Color.fromARGB(255, 203, 69, 95),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+  _HomeLoadedPage createState() => _HomeLoadedPage();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage>
+class _HomeLoadedPage extends State<OrderProcessRoute>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _earlyAnimationController;
@@ -50,9 +25,9 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     _earlyAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
-    Timer(Duration(milliseconds: 1500),
-            () => _earlyAnimationController.forward());
+        AnimationController(vsync: this, duration: Duration(milliseconds: 700));
+    Timer(Duration(milliseconds: 1650),
+        () => _earlyAnimationController.forward());
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 800));
@@ -61,12 +36,12 @@ class _MyHomePageState extends State<MyHomePage>
     _lateAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     Timer(
-        Duration(milliseconds: 2600), () => _lateAnimationController.forward());
+        Duration(milliseconds: 1800), () => _lateAnimationController.forward());
 
     _headerAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     Timer(Duration(milliseconds: 3200),
-            () => _headerAnimationController.forward());
+        () => _headerAnimationController.forward());
 
     _filliHeaderAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
