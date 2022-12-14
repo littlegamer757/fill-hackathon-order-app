@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:dotenv/dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
 String fts_ip = "";
 Socket? clientSock;
@@ -17,7 +16,7 @@ Future<void> main() async {
   }
   fts_ip = env["fts_ip"]!;
 
-  final server = await ServerSocket.bind("localhost", 4567);
+  final server = await ServerSocket.bind("192.168.0.22", 4567);
 
   server.listen((client) => handleConnection(client));
 }
@@ -47,7 +46,7 @@ void handleMessage(Uint8List data) {
   switch (message) {
     case "[cmd] start":
       print("[Server] Sending start command to FTS...");
-      //orderProcess();
+      orderProcess();
       break;
     default:
       print("[Server] Unknown message received: $message");
@@ -56,17 +55,13 @@ void handleMessage(Uint8List data) {
 }
 
 Future<void> orderProcess() async {
-  Uri startUrl = Uri.http(fts_ip, "filli/start");
-  await http.post(startUrl);
+  // Uri startUrl = Uri.http(fts_ip, "filli/start");
+  // clientSock!.write("[status] confirmed");
+  // await http.post(startUrl);
+  // clientSock!.write("[status] arrived");
   
-  Uri statusUrl = Uri.http(fts_ip, "filli/status");
-  String prevState = "";
-  Timer.periodic(Duration(milliseconds: 500), (timer) async { 
-    Response status = await http.get(statusUrl);
-    String curState = status.body;
-    if (prevState != curState) {
-      prevState = curState;
-      clientSock!.write("[status] $curState");
-    }
-  });
+  while (true) {
+    String input = stdin.readLineSync()!;
+    clientSock!.write(input);
+  }
 }

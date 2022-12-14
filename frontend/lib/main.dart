@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fill_hackathon/globals.dart';
+import 'package:fill_hackathon/stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
@@ -109,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 child: FilliSlider(animationController: _animationController),
               ),
               ButtonSlider(animationController: _lateAnimationController),
+              OrderStepper(),
             ],
           ),
         ],

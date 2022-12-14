@@ -10,15 +10,81 @@ OrderState state3 = OrderState.todo;
 
 class OrderStepper extends StatefulWidget {
   const OrderStepper({Key? key}) : super(key: key);
-  
+
   @override
   State<OrderStepper> createState() => _OrderStepperState();
 }
 
 class _OrderStepperState extends State<OrderStepper> {
-  
   @override
   Widget build(BuildContext context) {
+    void handleMessage(Uint8List data) {
+      final message = String.fromCharCodes(data);
+      print('[Client] Received a message: $message');
+
+      if (!message.startsWith("[status]")) {
+        print(
+            "[Client] Received a message that is not a status update ($message).");
+        return;
+      }
+
+      String statusUpdate = message.substring("[status] ".length);
+
+      switch (statusUpdate) {
+        case "confirmed":
+          print("[Client] Statusupdate received: $message.");
+          setState(() {
+            state1 = OrderState.done;
+            state2 = OrderState.active;
+          });
+          break;
+        case "delivering":
+          print("[Client] Statusupdate received: $message.");
+          state2 = OrderState.done;
+          state3 = OrderState.active;
+          break;
+        case "arrived":
+          print("[Client] Statusupdate received: $message.");
+          setState(() {
+            state2 = OrderState.done;
+            state3 = OrderState.done;
+          });
+          break;
+      }
+    }
+
+    void sendMessage(Socket socket, String message) {
+      print('[Client] Sending message: $message');
+      socket.write(message);
+    }
+
+    void start() async {
+      print("start gschissena");
+      // String serverIp = "10.7.43.5";
+      String serverIp = "192.168.0.22";
+      int serverPort = 4567;
+
+      final socket = await Socket.connect(serverIp, serverPort);
+      print(
+          '[Client] Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
+
+      socket.listen(
+        handleMessage,
+        onError: (error) {
+          print("[Client] Error occured: $error. Terminating.");
+          socket.destroy();
+        },
+        onDone: () {
+          print("[Client] Server disconnected. Terminating.");
+          socket.destroy();
+        },
+      );
+
+      sendMessage(socket, "[cmd] start");
+    }
+
+    start();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -82,62 +148,4 @@ enum OrderState {
   todo,
   active,
   done,
-}
-
-void start() async {
-  String serverIp = "10.7.43.5";
-  int serverPort = 4567;
-
-  final socket = await Socket.connect(serverIp, serverPort);
-  print(
-      '[Client] Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
-
-  socket.listen(
-    handleMessage,
-    onError: (error) {
-      print("[Client] Error occured: $error. Terminating.");
-      socket.destroy();
-    },
-    onDone: () {
-      print("[Client] Server disconnected. Terminating.");
-      socket.destroy();
-    },
-  );
-
-  sendMessage(socket, "[cmd] start");
-}
-
-void sendMessage(Socket socket, String message) {
-  print('[Client] Sending message: $message');
-  socket.write(message);
-}
-
-void handleMessage(Uint8List data) {
-  final message = String.fromCharCodes(data);
-  print('[Client] Received a message: $message');
-
-  if (!message.startsWith("[status]")) {
-    print(
-        "[Client] Received a message that is not a status update ($message).");
-    return;
-  }
-
-  String statusUpdate = message.substring("[status] ".length - 1);
-
-  switch (statusUpdate) {
-    case "confirmed":
-      print("[Client] Statusupdate received: $message.");
-      state1 = OrderState.done;
-      state2 = OrderState.active;
-      break;
-    case "delivering":
-      print("[Client] Statusupdate received: $message.");
-      state2 = OrderState.done;
-      state3 = OrderState.active;
-      break;
-    case "arrived":
-      print("[Client] Statusupdate received: $message.");
-      state3 = OrderState.done;
-      break;
-  }
 }
