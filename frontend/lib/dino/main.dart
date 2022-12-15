@@ -259,7 +259,7 @@ class _DinoHomePageState extends State<DinoHomePage>
                       left: screenSize.width / 2 - 30,
                       top: 100,
                       child: Text(
-                        'Score: ' + runDistance.toInt().toString(),
+                        'Score: ${runDistance.toInt()}',
                         style: TextStyle(
                           color: (runDistance ~/ dayNightOffest) % 2 == 0
                               ? Colors.black
@@ -276,7 +276,7 @@ class _DinoHomePageState extends State<DinoHomePage>
                       left: screenSize.width / 2 - 50,
                       top: 120,
                       child: Text(
-                        'High Score: ' + highScore.toString(),
+                        'High Score: $highScore',
                         style: TextStyle(
                           color: (runDistance ~/ dayNightOffest) % 2 == 0
                               ? Colors.black
@@ -312,6 +312,8 @@ class _DinoHomePageState extends State<DinoHomePage>
                                     children: [
                                       const Text("Gravity:"),
                                       SizedBox(
+                                        height: 25,
+                                        width: 75,
                                         child: TextField(
                                           controller: gravityController,
                                           key: UniqueKey(),
@@ -323,8 +325,6 @@ class _DinoHomePageState extends State<DinoHomePage>
                                             ),
                                           ),
                                         ),
-                                        height: 25,
-                                        width: 75,
                                       ),
                                     ],
                                   ),
@@ -343,6 +343,8 @@ class _DinoHomePageState extends State<DinoHomePage>
                                     children: [
                                       const Text("Acceleration:"),
                                       SizedBox(
+                                        height: 25,
+                                        width: 75,
                                         child: TextField(
                                           controller: accelerationController,
                                           key: UniqueKey(),
@@ -354,8 +356,6 @@ class _DinoHomePageState extends State<DinoHomePage>
                                             ),
                                           ),
                                         ),
-                                        height: 25,
-                                        width: 75,
                                       ),
                                     ],
                                   ),
@@ -374,6 +374,8 @@ class _DinoHomePageState extends State<DinoHomePage>
                                     children: [
                                       const Text("Initial Velocity:"),
                                       SizedBox(
+                                        height: 25,
+                                        width: 75,
                                         child: TextField(
                                           controller: runVelocityController,
                                           key: UniqueKey(),
@@ -385,8 +387,6 @@ class _DinoHomePageState extends State<DinoHomePage>
                                             ),
                                           ),
                                         ),
-                                        height: 25,
-                                        width: 75,
                                       ),
                                     ],
                                   ),
@@ -405,6 +405,8 @@ class _DinoHomePageState extends State<DinoHomePage>
                                     children: [
                                       const Text("Jump Velocity:"),
                                       SizedBox(
+                                        height: 25,
+                                        width: 75,
                                         child: TextField(
                                           controller: jumpVelocityController,
                                           key: UniqueKey(),
@@ -416,8 +418,6 @@ class _DinoHomePageState extends State<DinoHomePage>
                                             ),
                                           ),
                                         ),
-                                        height: 25,
-                                        width: 75,
                                       ),
                                     ],
                                   ),
@@ -436,6 +436,8 @@ class _DinoHomePageState extends State<DinoHomePage>
                                     children: [
                                       const Text("Day-Night Offset:"),
                                       SizedBox(
+                                        height: 25,
+                                        width: 75,
                                         child: TextField(
                                           controller: dayNightOffestController,
                                           key: UniqueKey(),
@@ -447,8 +449,6 @@ class _DinoHomePageState extends State<DinoHomePage>
                                             ),
                                           ),
                                         ),
-                                        height: 25,
-                                        width: 75,
                                       ),
                                     ],
                                   ),
@@ -479,18 +479,18 @@ class _DinoHomePageState extends State<DinoHomePage>
                     },
                   ),
                 ),
-                Positioned(
-                  bottom: 10,
-                  child: TextButton(
-                    onPressed: () {
-                      _die();
-                    },
-                    child: const Text(
-                      "Force Kill Dino",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 10,
+                //   child: TextButton(
+                //     onPressed: () {
+                //       _die();
+                //     },
+                //     child: const Text(
+                //       "Force Kill Dino",
+                //       style: TextStyle(color: Colors.red),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

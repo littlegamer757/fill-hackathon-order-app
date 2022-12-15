@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fill_hackathon/qr_reader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/svg.dart';
@@ -146,7 +147,9 @@ class CarouselSlider extends StatelessWidget {
                         MaterialStateProperty.all<Color>(Colors.white),
                   ).merge(
                       ElevatedButton.styleFrom(minimumSize: const Size(100, 44))),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => QrReader()));
+                  },
                   icon: const Icon(
                     // <-- Icon
                     Icons.lightbulb_outlined,
