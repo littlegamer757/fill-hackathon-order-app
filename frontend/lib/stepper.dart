@@ -145,9 +145,8 @@ class _OrderStepperState extends State<OrderStepper>
     void start() async {
       print("start gschissena");
 
-      String serverIp = "10.7.43.4";
-      // String serverIp = "10.7.43.5";
-      // String serverIp = "192.168.0.22";
+      // String serverIp = "10.7.43.4"; // Lea
+      String serverIp = "10.7.43.5"; // noassl
       int serverPort = 4567;
 
       final socket = await Socket.connect(serverIp, serverPort);

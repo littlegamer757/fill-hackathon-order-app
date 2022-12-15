@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fill_hackathon/globals.dart';
+import 'package:fill_hackathon/dino/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -165,7 +166,7 @@ class CameraSlide extends StatelessWidget {
             } else {
               final String code = barcode.rawValue!;
               if (code == "d2F0ZXJieXRlIGJlc3Rl") {
-                // TODO: Navigate to secret activity
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const DinoApp()));
               }
               debugPrint('Barcode found! $code');
             }

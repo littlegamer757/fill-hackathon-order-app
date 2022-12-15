@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fill_hackathon/qr_reader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
@@ -42,90 +43,30 @@ class _ManualState extends State<Manual> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: backgroundColor,
-        body: SlideTransition(
-          position: Tween<Offset>(
-            begin: Offset.zero,
-            end: const Offset(0, -1),
-          ).animate(_endAnimationController),
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                bottom: -450,
-                child:
-                    SplashBackground(animationController: _animationController),
-              ),
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      TextHeaderSlider(
-                          animationController: _animationController),
-                      TextFilliSlider(
-                          animationController: _animationController),
-                    ],
-                  ),
-                  Expanded(
-                    child:
-                        FilliSlider(animationController: _animationController),
-                  ),
-                  TextHeaderSlider(animationController: _animationController),
-                  SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(0, 1),
-                        end: Offset.zero,
-                      ).animate(_animationController),
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 50.0, top: 25.0),
-                        child: ElevatedButton.icon(
-                          label: const Text(
-                            'Hint',
-                            style: normalRed,
-                          ),
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(28.0))),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          ).merge(ElevatedButton.styleFrom(minimumSize: const Size(150, 56))),
-                          onPressed: () {
-                            Navigator.of(context).push(createStepperRoute());
-                          },
-                          icon: const Icon(
-                            // <-- Icon
-                            Icons.lightbulb_outlined,
-                            size: 26.0,
-                            color: filliRed,
-                          ),
-                        ),
-                      ))
-                ],
-              )
-            ],
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: <Widget>[
+          Positioned(
+            bottom: -450,
+            child: SplashBackground(
+                animationController: _animationController),
           ),
-        ));
-  }
-
-  Route createStepperRoute() {
-    _endAnimationController.forward();
-    Future.delayed(const Duration(milliseconds: 300),
-            () => { setState(() {backgroundColor = filliRed;})});
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const QrReader(),
-      transitionDuration: const Duration(milliseconds: 2500),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
-
-        var tween =
-        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
+          Column(
+            children: [
+              Stack(
+                children: [
+                  TextHeaderSlider(animationController: _animationController),
+                  TextFilliSlider(animationController: _animationController),
+                ],
+              ),
+              Expanded(
+                child: FilliSlider(animationController: _animationController),
+              ),
+              CarouselSlider(animationController: _animationController),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -148,6 +89,100 @@ class TextHeaderSlider extends StatelessWidget {
             margin: const EdgeInsets.only(left: 35, top: 100),
             alignment: Alignment.centerLeft,
             child: const Text('Hi I\'m ', style: bigRegularBlack)));
+  }
+}
+
+class CarouselSlider extends StatelessWidget {
+  final AnimationController animationController;
+
+  CarouselSlider({
+    required this.animationController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: Offset(0, -1),
+        end: Offset.zero,
+      ).animate(animationController),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        child: FlutterCarousel(
+          items: [
+            "Swipe here to get to know me.",
+            "First, try to shake my hand.",
+            "Look, I can also move my feet so we can dance!",
+            "Even my antennas can be adjusted for improved internet speed.",
+            "Now it's your turn to discover my secrets!"
+          ].asMap().entries.map((entry) {
+            int idx = entry.key;
+            String val = entry.value;
+
+            List<Widget> colItems = [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Text(
+                  val,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ];
+
+            if (idx == 4) {
+              colItems.add(Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: ElevatedButton.icon(
+                  label: const Text(
+                    'Hint',
+                    style: TextStyle(
+                      color: filliRed,
+                      fontSize: 18,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28.0))),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                  ).merge(
+                      ElevatedButton.styleFrom(minimumSize: const Size(100, 44))),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => QrReader()));
+                  },
+                  icon: const Icon(
+                    // <-- Icon
+                    Icons.lightbulb_outlined,
+                    size: 22.0,
+                    color: filliRed,
+                  ),
+                ),
+              ));
+            }
+
+            return Builder(builder: (BuildContext context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: colItems,
+              );
+            });
+          }).toList(),
+          options: CarouselOptions(
+            showIndicator: true,
+            height: 165,
+            slideIndicator: const CircularSlideIndicator(
+              indicatorBackgroundColor: filliLightRed,
+              currentIndicatorColor: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
