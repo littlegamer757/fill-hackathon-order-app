@@ -1,3 +1,4 @@
+import 'package:fill_hackathon/dino/main.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -24,7 +25,7 @@ class QrReader extends StatelessWidget {
                 } else {
                   final String code = barcode.rawValue!;
                   if (code == "d2F0ZXJieXRlIGJlc3Rl") {
-                    // TODO: Navigate to secret activity
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const DinoApp()));
                   }
                   debugPrint('Barcode found! $code');
                 }
@@ -37,22 +38,22 @@ class QrReader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: 8),
                   child: IconButton(
                     onPressed: () {
                       cameraController.switchCamera();
                     },
-                    icon: Icon(Icons.camera_front, color: Colors.white),
+                    icon: const Icon(Icons.camera_front, color: Colors.white),
                     iconSize: 32,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 8),
+                  padding: const EdgeInsets.only(left: 8),
                   child: IconButton(
                     onPressed: () {
                       cameraController.toggleTorch();
                     },
-                    icon: Icon(Icons.flash_on, color: Colors.white),
+                    icon: const Icon(Icons.flash_on, color: Colors.white),
                     iconSize: 32,
                   ),
                 ),
