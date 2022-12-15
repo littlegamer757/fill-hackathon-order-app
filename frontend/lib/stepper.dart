@@ -203,19 +203,22 @@ class _OrderStepperState extends State<OrderStepper>
                               children: [
                                 FadeTransition(
                                     opacity: _animationFadeOut2,
-                                    child: Image.asset(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                        child: Image.asset(
                                       'assets/forklift2.gif',
-                                      width: MediaQuery.of(context).size.width,
-                                    ))
+                                    )))
                               ]),
                         ),
                         FadeTransition(
                           opacity: _animationFadeIn3,
-                          child: Image.asset(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
                             'assets/delivery.gif',
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.scaleDown,
-                          ),
+                          )),
                           //     ),
                           //   ],
                           // ),
