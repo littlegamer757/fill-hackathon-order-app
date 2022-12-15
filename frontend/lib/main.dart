@@ -1,13 +1,10 @@
 import 'dart:async';
 
 import 'package:fill_hackathon/globals.dart';
-import 'package:fill_hackathon/qr_reader.dart';
 import 'package:fill_hackathon/stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
-
-import 'manual.dart';
 
 void main() {
   runApp(const MyApp());
