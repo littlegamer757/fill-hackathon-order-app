@@ -6,9 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 
+import 'manual.dart';
+
 void main() {
   runApp(const MyApp());
 }
+
+var backgroundColor = filliRed;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,10 +22,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Filli',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'ProductSans',
-        scaffoldBackgroundColor: const Color.fromARGB(255, 203, 69, 95),
-      ),
+          primarySwatch: Colors.blue,
+          fontFamily: 'ProductSans',
+          scaffoldBackgroundColor:
+              backgroundColor //const Color.fromARGB(255, 203, 69, 95),
+          ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -42,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late AnimationController _lateAnimationController;
   late AnimationController _headerAnimationController;
   late AnimationController _filliHeaderAnimationController;
+  late AnimationController _endAnimationController;
 
   @override
   void initState() {
@@ -70,6 +76,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     Timer(const Duration(milliseconds: 3000),
         () => _filliHeaderAnimationController.forward());
 
+    _endAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1500));
+
     super.initState();
   }
 
@@ -80,41 +89,109 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _lateAnimationController.dispose();
     _headerAnimationController.dispose();
     _filliHeaderAnimationController.dispose();
+    _endAnimationController.dispose();
     super.dispose();
+  }
+
+  refresh() {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Positioned(
-            bottom: -200,
-            child: SplashBackground(
-              animationController: _earlyAnimationController,
-            ),
-          ),
-          Column(
-            children: [
-              Stack(
+        backgroundColor: backgroundColor,
+        body: SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(0, -1),
+          ).animate(_endAnimationController),
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                bottom: -200,
+                child: SplashBackground(
+                  animationController: _earlyAnimationController,
+                ),
+              ),
+              Column(
                 children: [
-                  TextHeaderSlider(
-                    animationController: _headerAnimationController,
+                  Stack(
+                    children: [
+                      TextHeaderSlider(
+                        animationController: _headerAnimationController,
+                      ),
+                      TextFilliSlider(
+                        animationController: _filliHeaderAnimationController,
+                      ),
+                    ],
                   ),
-                  TextFilliSlider(
-                    animationController: _filliHeaderAnimationController,
+                  Expanded(
+                    child:
+                        FilliSlider(animationController: _animationController),
                   ),
+                  SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 1),
+                      end: Offset.zero,
+                    ).animate(_lateAnimationController),
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 50.0, top: 25.0),
+                      child: ElevatedButton.icon(
+                        label: const Text(
+                          'Order',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(28.0))),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(filliRed),
+                        ).merge(ElevatedButton.styleFrom(
+                            minimumSize: const Size(150, 56))),
+                        onPressed: () {
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => const Manual()));
+                          Navigator.of(context).push(createStepperRoute());
+                        },
+                        icon: const Icon(
+                          // <-- Icon
+                          Icons.shopping_cart_outlined,
+                          size: 26.0,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
-              Expanded(
-                child: FilliSlider(animationController: _animationController),
-              ),
-              ButtonSlider(animationController: _lateAnimationController),
-              OrderStepper(),
             ],
           ),
-        ],
-      ),
+        ));
+  }
+
+  Route createStepperRoute() {
+    _endAnimationController.forward();
+    Future.delayed(const Duration(milliseconds: 100),
+        () => {backgroundColor = Colors.white, refresh()});
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const OrderStepper(),
+      transitionDuration: const Duration(milliseconds: 2500),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 }
@@ -136,10 +213,7 @@ class TextHeaderSlider extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: const Text(
           'Get the newest ',
-          style: TextStyle(
-            fontSize: 28,
-            color: Color.fromARGB(255, 255, 208, 217),
-          ),
+          style: bigRegularRed,
         ),
       ),
     );
@@ -163,11 +237,7 @@ class TextFilliSlider extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: const Text(
           'Filli Future ',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 40,
-          ),
+          style: bigBoldWhite,
         ),
       ),
     );
@@ -200,8 +270,12 @@ class FilliSlider extends StatelessWidget {
 
 class ButtonSlider extends StatelessWidget {
   final AnimationController animationController;
+  final AnimationController endAnimationController;
 
-  const ButtonSlider({super.key, required this.animationController});
+  const ButtonSlider(
+      {super.key,
+      required this.animationController,
+      required this.endAnimationController});
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +297,10 @@ class ButtonSlider extends StatelessWidget {
                     borderRadius: BorderRadius.circular(28.0))),
             backgroundColor: MaterialStateProperty.all<Color>(filliRed),
           ).merge(ElevatedButton.styleFrom(minimumSize: const Size(150, 56))),
-          onPressed: () {},
+          onPressed: () {
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => const Manual()));
+            Navigator.of(context).push(createStepperRoute());
+          },
           icon: const Icon(
             // <-- Icon
             Icons.shopping_cart_outlined,
@@ -231,6 +308,30 @@ class ButtonSlider extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Route createStepperRoute() {
+    endAnimationController.forward();
+    Future.delayed(const Duration(milliseconds: 100),
+        () => backgroundColor = Colors.white);
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const OrderStepper(),
+      transitionDuration: const Duration(milliseconds: 2000),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 }

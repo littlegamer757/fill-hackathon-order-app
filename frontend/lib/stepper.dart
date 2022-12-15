@@ -85,14 +85,34 @@ class _OrderStepperState extends State<OrderStepper> {
 
     start();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          OrderStep(state: state1),
-          OrderStep(state: state2),
-          OrderStep(state: state3),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                child: Image.asset(
+                  'assets/giphy.gif',
+                  width: MediaQuery.of(context).size.width / 1.7,
+                  fit: BoxFit.scaleDown,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                margin: const EdgeInsets.only(bottom: 150.0, top: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    OrderStep(state: state1),
+                    OrderStep(state: state2),
+                    OrderStep(state: state3),
+                  ],
+                ),
+              ),
+              Text('Your order has been received.')
+            ],
+          )
         ],
       ),
     );
@@ -116,7 +136,7 @@ class OrderStep extends StatelessWidget {
           padding: const EdgeInsets.all(2),
           child: const Icon(
             Icons.done,
-            color: Colors.white,
+            color: Colors.grey,
           ),
         );
       case OrderState.active:

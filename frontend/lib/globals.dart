@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
 
-var bigRegular = const TextStyle(
-    fontSize: 12
-);
 
-var bigBold = const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 50
-);
+const bigRegularRed = TextStyle(fontSize: 28, color: Color.fromARGB(255, 255, 208, 217));
 
-var bigBoldRed = const TextStyle(
-  color: Color.fromRGBO(203, 69, 95, 80),
-    fontWeight: FontWeight.bold,
-    fontSize: 24
-);
-
-var bigBoldWhite = const TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontSize: 24
+const bigBoldWhite = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  fontSize: 40,
 );
 
 const filliRed = Color.fromARGB(255, 203, 69, 95);
