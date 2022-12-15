@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 import 'globals.dart';
 
@@ -35,6 +36,7 @@ class _ManualState extends State<Manual>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
           Positioned(
@@ -53,6 +55,7 @@ class _ManualState extends State<Manual>
               Expanded(
                 child: FilliSlider(animationController: _animationController),
               ),
+              TextHeaderSlider(animationController: _animationController),
               ButtonSlider(animationController: _animationController)
             ],
           )
@@ -125,11 +128,18 @@ class FilliSlider extends StatelessWidget {
         ).animate(animationController),
         child: Container(
           alignment: Alignment.topCenter,
-          child: Image.asset(
-            'assets/giphy.gif',
-            width: MediaQuery.of(context).size.width / 1.7,
-            fit: BoxFit.scaleDown,
-          ),
+          child:
+            ModelViewer(
+              src: 'assets/BG-Filli.glb',
+              autoRotate: true,
+              cameraControls: true,
+              backgroundColor: Colors.transparent,
+            ),
+          // child: Image.asset(
+          //   'assets/giphy.gif',
+          //   width: MediaQuery.of(context).size.width / 1.7,
+          //   fit: BoxFit.scaleDown,
+          // ),
         ));
   }
 }

@@ -131,7 +131,7 @@ class _OrderStepperState extends State<OrderStepper>
                       state3 = OrderState.done;
                     })
                   });
-          Timer(const Duration(milliseconds: 6000),
+          Timer(const Duration(milliseconds: 5000),
               () => {Navigator.of(context).push(createStepperRoute())});
           break;
       }
@@ -187,11 +187,14 @@ class _OrderStepperState extends State<OrderStepper>
                       Stack(alignment: Alignment.bottomCenter, children: [
                         FadeTransition(
                           opacity: _animationFadeOut,
-                          child: Image.asset(
-                            'assets/received.gif',
-                            width: MediaQuery.of(context).size.width / 1.2,
-                            fit: BoxFit.scaleDown,
-                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              'assets/received.gif',
+                              width: MediaQuery.of(context).size.width / 1.2,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          )
                         ),
                         FadeTransition(
                           opacity: _animationFadeIn2,
@@ -262,13 +265,13 @@ class _OrderStepperState extends State<OrderStepper>
                                           alignment: Alignment.center,
                                           margin: const EdgeInsets.only(
                                               bottom: 5.0, top: 30.0),
-                                          child: const Text('Great!',
+                                          child: const Text('Just a minute!',
                                               style: normalRed),
                                         ),
                                         Container(
                                           alignment: Alignment.center,
                                           child: const Text(
-                                              'Your order has been received.',
+                                              'Your Filli is on the way.',
                                               style: normalBlack),
                                         )
                                       ],
