@@ -9,32 +9,33 @@ String fts_ip = "";
 Socket? clientSock;
 
 Future<void> main() async {
-  // final DotEnv env = DotEnv(includePlatformEnvironment: true)..load();
-  // if (!env.isDefined("fts_ip")) {
-  //   print("IP address of FTS is not defined in environment. Exiting.");
-  //   return;
-  // }
-  // fts_ip = env["fts_ip"]!;
-  fts_ip = "10.7.42.61";
+  final DotEnv env = DotEnv(includePlatformEnvironment: true)..load();
+  if (!env.isDefined("fts_ip")) {
+    print("IP address of FTS is not defined in environment. Exiting.");
+    return;
+  }
+  fts_ip = env["fts_ip"]!;
+  print("FTS IP found: $fts_ip");
+  // fts_ip = "10.7.42.61";
 
-//   final server = await ServerSocket.bind("192.168.0.22", 4567);
-  final server = await ServerSocket.bind("10.7.43.4", 4567);
+  // final server = await ServerSocket.bind("192.168.0.22", 4567);
+  // final server = await ServerSocket.bind("10.7.43.4", 4567); // Lea
+  final server = await ServerSocket.bind("10.7.43.5", 4567); // noassl
 
   server.listen((client) => handleConnection(client));
 }
 
 void handleConnection(Socket client) {
-  print("[Server] Connection from ${client.remoteAddress.address}:${client.remotePort}");
+  print(
+      "[Server] Connection from ${client.remoteAddress.address}:${client.remotePort}");
   clientSock = client;
 
   client.listen(
     handleMessage,
-    
     onError: (error) {
       print("[Server] Error occured: $error");
       client.close();
     },
-    
     onDone: () {
       print("[Server] Client left");
       client.close();
@@ -57,13 +58,14 @@ void handleMessage(Uint8List data) {
 }
 
 Future<void> orderProcess() async {
-  // Uri startUrl = Uri.http(fts_ip, "filli/start");
-  // clientSock!.write("[status] confirmed");
-  // await http.post(startUrl);
-  // clientSock!.write("[status] arrived");
-  
-  while (true) {
-    String input = stdin.readLineSync()!;
-    clientSock!.write(input);
-  }
+  Uri startUrl = Uri.http(fts_ip, "filli/start");
+  clientSock!.write("[status] confirmed");
+  await http.post(startUrl);
+  clientSock!.write("[status] arrived");
+
+  // String input;
+  // do {
+  //   input = stdin.readLineSync()!;
+  //   clientSock!.write(input);
+  // } while (input.isNotEmpty);
 }
