@@ -38,7 +38,7 @@ class _ManualState extends State<Manual>
       body: Stack(
         children: <Widget>[
           Positioned(
-            bottom: -200,
+            bottom: -450,
             child: SplashBackground(
                 animationController: _animationController),
           ),
@@ -79,8 +79,8 @@ class TextHeaderSlider extends StatelessWidget {
         child: Container(
             margin: const EdgeInsets.only(left: 35, top: 100),
             alignment: Alignment.centerLeft,
-            child: const Text('Get the newest ',
-                style: bigRegularRed
+            child: const Text('Hi I\'m ',
+                style: bigRegularBlack
             )));
   }
 }
@@ -103,8 +103,8 @@ class TextFilliSlider extends StatelessWidget {
             margin: const EdgeInsets.only(left: 35, top: 132),
             alignment: Alignment.centerLeft,
             child: const Text(
-              'Filli Future ',
-              style: bigBoldWhite,
+              'Filli Future!',
+              style: bigBoldRed,
             )));
   }
 }
@@ -124,7 +124,7 @@ class FilliSlider extends StatelessWidget {
           end: Offset.zero,
         ).animate(animationController),
         child: Container(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.topCenter,
           child: Image.asset(
             'assets/giphy.gif',
             width: MediaQuery.of(context).size.width / 1.7,
@@ -152,20 +152,21 @@ class ButtonSlider extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 50.0, top: 25.0),
           child: ElevatedButton.icon(
             label: const Text(
-              'Order',
-              style: TextStyle(fontSize: 20),
+              'Hint',
+              style: normalRed,
             ),
             style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28.0))),
-              backgroundColor: MaterialStateProperty.all<Color>(filliRed),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
             ).merge(ElevatedButton.styleFrom(minimumSize: const Size(150, 56))),
             onPressed: () {},
             icon: const Icon(
               // <-- Icon
-              Icons.shopping_cart_outlined,
+              Icons.lightbulb_outlined,
               size: 26.0,
+              color: filliRed,
             ),
           ),
         ));
@@ -192,7 +193,7 @@ class SplashBackground extends StatelessWidget {
           offset: Offset(5, 5),
           sigma: 7,
           child: SvgPicture.asset(
-            'assets/splash2.svg',
+            'assets/splashRed.svg',
             alignment: Alignment.bottomCenter,
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
