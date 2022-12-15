@@ -198,13 +198,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-  model_viewer_plus:
-    dependency: "direct main"
-    description:
-      name: model_viewer_plus
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.0"
   mobile_scanner:
     dependency: "direct main"
     description:
@@ -212,6 +205,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  model_viewer_plus:
+    dependency: "direct main"
+    description:
+      name: model_viewer_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.0"
   path:
     dependency: transitive
     description:
