@@ -30,3 +30,4 @@ const normalBlack = TextStyle(
 const filliRed = Color.fromARGB(255, 203, 69, 95);
 
 const filliLightRed = Color.fromARGB(255, 220, 181, 189);
+
