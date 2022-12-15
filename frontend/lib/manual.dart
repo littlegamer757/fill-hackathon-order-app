@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
@@ -55,8 +56,7 @@ class _ManualState extends State<Manual>
               Expanded(
                 child: FilliSlider(animationController: _animationController),
               ),
-              TextHeaderSlider(animationController: _animationController),
-              ButtonSlider(animationController: _animationController)
+              CarouselSlider(animationController: _animationController),
             ],
           )
         ],
@@ -82,9 +82,99 @@ class TextHeaderSlider extends StatelessWidget {
         child: Container(
             margin: const EdgeInsets.only(left: 35, top: 100),
             alignment: Alignment.centerLeft,
-            child: const Text('Hi I\'m ',
-                style: bigRegularBlack
-            )));
+            child: const Text('Hi I\'m ', style: bigRegularBlack)));
+  }
+}
+
+class CarouselSlider extends StatelessWidget {
+  final AnimationController animationController;
+
+  CarouselSlider({
+    required this.animationController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: Offset(0, -1),
+        end: Offset.zero,
+      ).animate(animationController),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        child: FlutterCarousel(
+          items: [
+            "Swipe here to get to know me.",
+            "First, try to shake my hand.",
+            "Look, I can also move my feet so we can dance!",
+            "Even my antennas can be adjusted for improved internet speed.",
+            "Now it's your turn to discover my secrets!"
+          ].asMap().entries.map((entry) {
+            int idx = entry.key;
+            String val = entry.value;
+
+            List<Widget> colItems = [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Text(
+                  val,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ];
+
+            if (idx == 4) {
+              colItems.add(Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: ElevatedButton.icon(
+                  label: const Text(
+                    'Hint',
+                    style: TextStyle(
+                      color: filliRed,
+                      fontSize: 18,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28.0))),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                  ).merge(
+                      ElevatedButton.styleFrom(minimumSize: const Size(100, 44))),
+                  onPressed: () {},
+                  icon: const Icon(
+                    // <-- Icon
+                    Icons.lightbulb_outlined,
+                    size: 22.0,
+                    color: filliRed,
+                  ),
+                ),
+              ));
+            }
+
+            return Builder(builder: (BuildContext context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: colItems,
+              );
+            });
+          }).toList(),
+          options: CarouselOptions(
+            showIndicator: true,
+            height: 165,
+            slideIndicator: const CircularSlideIndicator(
+              indicatorBackgroundColor: filliLightRed,
+              currentIndicatorColor: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
