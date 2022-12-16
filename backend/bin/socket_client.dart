@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:dotenv/dotenv.dart';
 
+/// WebSocket-Client to test the backend. Sends the start command and parses 
+/// the server's responses.
 void main() async {
   final DotEnv env = DotEnv(includePlatformEnvironment: true)..load();
   if (!env.isDefined("server_ip")) {
