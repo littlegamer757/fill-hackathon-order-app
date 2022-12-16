@@ -18,8 +18,10 @@ Future<void> main() async {
   fts_ip = "10.7.42.61";
 
 //   final server = await ServerSocket.bind("192.168.0.22", 4567);
-  final server = await ServerSocket.bind("10.7.43.4", 4567);
+//   final server = await ServerSocket.bind("10.7.43.4", 4567);
 
+  final server = await ServerSocket.bind("192.168.178.33", 4567);
+//
   server.listen((client) => handleConnection(client));
 }
 

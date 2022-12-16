@@ -43,6 +43,7 @@ class _QrReader extends State<QrReader> with TickerProviderStateMixin {
     MobileScannerController cameraController = MobileScannerController();
 
     return Scaffold(
+      backgroundColor: filliRed,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

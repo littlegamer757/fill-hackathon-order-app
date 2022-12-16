@@ -178,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         () => {backgroundColor = Colors.white, refresh()});
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          const Manual(),
+          const OrderStepper(),
       transitionDuration: const Duration(milliseconds: 2500),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);

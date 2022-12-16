@@ -146,7 +146,9 @@ class _OrderStepperState extends State<OrderStepper>
       print("start gschissena");
 
       // String serverIp = "10.7.43.4"; // Lea
-      String serverIp = "10.7.43.5"; // noassl
+      // String serverIp = "10.7.43.5"; // noassl
+
+      String serverIp = "192.168.178.33";
       int serverPort = 4567;
 
       final socket = await Socket.connect(serverIp, serverPort);
@@ -313,7 +315,7 @@ class _OrderStepperState extends State<OrderStepper>
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           const Manual(),
-      transitionDuration: const Duration(milliseconds: 2500),
+      transitionDuration: const Duration(milliseconds: 1500),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;

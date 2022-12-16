@@ -20,7 +20,10 @@ var backgroundColor = Colors.white;
 
 class _ManualState extends State<Manual> with TickerProviderStateMixin {
   late AnimationController _animationController;
+  late AnimationController _earlyAnimationController;
   late AnimationController _endAnimationController;
+  late Animation<double> _animationFadeIn;
+  late AnimationController _animationControllerOut;
 
   @override
   void initState() {
@@ -28,8 +31,21 @@ class _ManualState extends State<Manual> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: Duration(milliseconds: 800));
     Timer(Duration(milliseconds: 2000), () => _animationController.forward());
 
+    _earlyAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+    Timer(Duration(milliseconds: 1800), () => _earlyAnimationController.forward());
+
     _endAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1500));
+
+    _animationControllerOut = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+    Timer(Duration(milliseconds: 3000), () => _animationControllerOut.forward());
+    _animationFadeIn =
+        Tween(begin: 0.0, end: 1.0).animate(_animationControllerOut);
 
     super.initState();
   }
@@ -49,18 +65,18 @@ class _ManualState extends State<Manual> with TickerProviderStateMixin {
           Positioned(
             bottom: -450,
             child: SplashBackground(
-                animationController: _animationController),
+                animationController: _earlyAnimationController),
           ),
           Column(
             children: [
               Stack(
                 children: [
                   TextHeaderSlider(animationController: _animationController),
-                  TextFilliSlider(animationController: _animationController),
+                  TextFilliSlider(animationController: _earlyAnimationController),
                 ],
               ),
               Expanded(
-                child: FilliSlider(animationController: _animationController),
+                child: FilliFader(animation: _animationFadeIn),
               ),
               CarouselSlider(animationController: _animationController),
             ],
@@ -103,7 +119,7 @@ class CarouselSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(0, -1),
+        begin: Offset(0, 1),
         end: Offset.zero,
       ).animate(animationController),
       child: Container(
@@ -210,20 +226,17 @@ class TextFilliSlider extends StatelessWidget {
   }
 }
 
-class FilliSlider extends StatelessWidget {
-  final AnimationController animationController;
+class FilliFader extends StatelessWidget {
+  final Animation<double> animation;
 
-  FilliSlider({
-    required this.animationController,
+  FilliFader({
+    required this.animation,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0, 1.5),
-          end: Offset.zero,
-        ).animate(animationController),
+    return FadeTransition(
+      opacity: animation,
         child: Container(
           alignment: Alignment.topCenter,
           child: ModelViewer(
