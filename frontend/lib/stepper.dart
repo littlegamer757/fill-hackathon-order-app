@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:fill_hackathon/globals.dart';
 import 'package:fill_hackathon/manual.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 OrderState state1 = OrderState.active;
 OrderState state2 = OrderState.todo;
@@ -283,11 +284,15 @@ class _OrderStepperState extends State<OrderStepper>
   }
 
   void start() async {
-    // String serverIp = "10.7.43.4"; // Lea
-    // String serverIp = "10.7.43.5"; // noassl
-
-    String serverIp = "192.168.178.33";
-    int serverPort = 4567;
+    late String serverIp;
+    late int serverPort;
+    
+    try {
+      serverIp = dotenv.get("server_ip");
+      serverPort = int.parse(dotenv.get("server_port"));
+    } catch (exception) {
+      throw EnvDataNotDefinedException("Server IP or port not defined in .env file");
+    }
 
     final socket = await Socket.connect(serverIp, serverPort);
     print(
@@ -381,4 +386,9 @@ enum OrderState {
   todo,
   active,
   done,
+}
+
+class EnvDataNotDefinedException {
+  String message;
+  EnvDataNotDefinedException(this.message);
 }
