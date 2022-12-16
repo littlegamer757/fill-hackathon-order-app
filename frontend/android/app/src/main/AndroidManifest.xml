@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.supa.fill_hackathon">
    <application
-        android:label="fill_hackathon"
+        android:label="Santa Filli"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
        android:usesCleartextTraffic="true">
