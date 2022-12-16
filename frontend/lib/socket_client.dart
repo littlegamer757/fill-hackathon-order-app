@@ -8,7 +8,9 @@ class SocketClient {
 }
 
 void start() async {
-  String serverIp = "10.7.43.5";
+  // String serverIp = "10.7.43.5";
+  String serverIp = "192.168.178.33";
+  //192.168.178.33
   int serverPort = 4567;
 
   final socket = await Socket.connect(serverIp, serverPort);

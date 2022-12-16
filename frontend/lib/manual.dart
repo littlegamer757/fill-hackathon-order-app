@@ -16,15 +16,45 @@ class Manual extends StatefulWidget {
   _ManualState createState() => _ManualState();
 }
 
-class _ManualState extends State<Manual>
-    with TickerProviderStateMixin {
+var backgroundColor = Colors.white;
+
+class _ManualState extends State<Manual> with TickerProviderStateMixin {
   late AnimationController _animationController;
+  late AnimationController _earlyAnimationController;
+  late AnimationController _endAnimationController;
+
+  late AnimationController _animationFadeInController;
+  late Animation<double> _animationFadeIn;
+  late AnimationController _animationControllerOut;
 
   @override
   void initState() {
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 800));
     Timer(Duration(milliseconds: 2000), () => _animationController.forward());
+
+    _earlyAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+    Timer(Duration(milliseconds: 1800),
+        () => _earlyAnimationController.forward());
+
+    _endAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1300));
+
+    _animationControllerOut = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+
+
+    _animationFadeInController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    Timer(
+        Duration(milliseconds: 3200), () => _animationFadeInController.forward());
+
+    _animationFadeIn =
+        Tween(begin: 0.0, end: 1.0).animate(_animationFadeInController);
 
     super.initState();
   }
@@ -38,31 +68,50 @@ class _ManualState extends State<Manual>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: <Widget>[
-          Positioned(
-            bottom: -450,
-            child: SplashBackground(
-                animationController: _animationController),
-          ),
-          Column(
-            children: [
+        backgroundColor: Colors.white,
+        body: SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(0, -1),
+          ).animate(_endAnimationController),
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                bottom: - MediaQuery.of(context).size.height / 1.7,
+                child: SplashBackground(
+                    animationController: _earlyAnimationController),
+              ),
               Stack(
                 children: [
-                  TextHeaderSlider(animationController: _animationController),
-                  TextFilliSlider(animationController: _animationController),
+                  Flex(
+                    direction: Axis.vertical,
+                    children: [Expanded(child: FilliFader(animation: _animationFadeIn)),]
+                  ),
+                  Column(
+                    children: [
+                      Stack(
+                        children: [
+                          TextHeaderSlider(
+                              animationController: _animationController),
+                          TextFilliSlider(
+                              animationController: _earlyAnimationController),
+                        ],
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      CarouselSlider(
+                        animationController: _animationController,
+                        endAnimationController: _endAnimationController,
+                        callback: () => setState(() {backgroundColor = filliRed;}),
+                      ),
+                    ],
+                  )
                 ],
-              ),
-              Expanded(
-                child: FilliSlider(animationController: _animationController),
-              ),
-              CarouselSlider(animationController: _animationController),
+              )
             ],
-          )
-        ],
-      ),
-    );
+          ),
+        ));
   }
 }
 
@@ -89,19 +138,23 @@ class TextHeaderSlider extends StatelessWidget {
 
 class CarouselSlider extends StatelessWidget {
   final AnimationController animationController;
+  final AnimationController endAnimationController;
+  final Function callback;
 
-  CarouselSlider({
-    required this.animationController,
-  });
+  CarouselSlider(
+      {required this.animationController,
+      required this.endAnimationController,
+      required this.callback});
 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(0, -1),
+        begin: Offset(0, 1),
         end: Offset.zero,
       ).animate(animationController),
       child: Container(
+        margin: EdgeInsets.only(bottom: 50),
         alignment: Alignment.centerLeft,
         child: FlutterCarousel(
           items: [
@@ -119,10 +172,7 @@ class CarouselSlider extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Text(
                   val,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white
-                  ),
+                  style: const TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -145,10 +195,13 @@ class CarouselSlider extends StatelessWidget {
                             borderRadius: BorderRadius.circular(28.0))),
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.white),
-                  ).merge(
-                      ElevatedButton.styleFrom(minimumSize: const Size(100, 44))),
+                  ).merge(ElevatedButton.styleFrom(
+                      minimumSize: const Size(100, 44))),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => QrReader()));
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => QrReader()));
+                    Timer(Duration(milliseconds: 300), () => endAnimationController.forward());
+                    Navigator.of(context).push(createStepperRoute());
+                    // Timer(Duration(milliseconds: 1000), () => Navigator.of(context).push(createStepperRoute()));
                   },
                   icon: const Icon(
                     // <-- Icon
@@ -179,6 +232,29 @@ class CarouselSlider extends StatelessWidget {
       ),
     );
   }
+
+  Route createStepperRoute() {
+    // endAnimationController.forward();
+    Future.delayed(const Duration(milliseconds: 100),
+            () => {callback()});
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const QrReader(),
+      transitionDuration: const Duration(milliseconds: 2500),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 }
 
 class TextFilliSlider extends StatelessWidget {
@@ -205,29 +281,25 @@ class TextFilliSlider extends StatelessWidget {
   }
 }
 
-class FilliSlider extends StatelessWidget {
-  final AnimationController animationController;
+class FilliFader extends StatelessWidget {
+  final Animation<double> animation;
 
-  FilliSlider({
-    required this.animationController,
+  FilliFader({
+    required this.animation,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0, 1.5),
-          end: Offset.zero,
-        ).animate(animationController),
+    return FadeTransition(
+        opacity: animation,
         child: Container(
           alignment: Alignment.topCenter,
-          child:
-            ModelViewer(
-              src: 'assets/BG-Filli.glb',
-              autoRotate: true,
-              cameraControls: true,
-              backgroundColor: Colors.transparent,
-            ),
+          child: ModelViewer(
+            src: 'assets/BG-Filli.glb',
+            autoRotate: true,
+            cameraControls: true,
+            backgroundColor: Colors.transparent,
+          ),
           // child: Image.asset(
           //   'assets/giphy.gif',
           //   width: MediaQuery.of(context).size.width / 1.7,
@@ -239,10 +311,13 @@ class FilliSlider extends StatelessWidget {
 
 class ButtonSlider extends StatelessWidget {
   final AnimationController animationController;
+  final AnimationController endAnimationController;
+  final Function callback;
 
-  ButtonSlider({
-    required this.animationController,
-  });
+  ButtonSlider(
+      {required this.animationController,
+      required this.endAnimationController,
+      required this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +339,10 @@ class ButtonSlider extends StatelessWidget {
                       borderRadius: BorderRadius.circular(28.0))),
               backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
             ).merge(ElevatedButton.styleFrom(minimumSize: const Size(150, 56))),
-            onPressed: () {},
+            onPressed: () {
+              endAnimationController.forward();
+              // Timer(Duration(milliseconds: 1000), () => Navigator.of(context).push(createStepperRoute()));
+            },
             icon: const Icon(
               // <-- Icon
               Icons.lightbulb_outlined,
@@ -273,6 +351,29 @@ class ButtonSlider extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  Route createStepperRoute() {
+    // endAnimationController.forward();
+    // Future.delayed(const Duration(milliseconds: 100),
+    //         () => {callback()});
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const QrReader(),
+      transitionDuration: const Duration(milliseconds: 2500),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
   }
 }
 
