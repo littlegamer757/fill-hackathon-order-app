@@ -22,12 +22,12 @@ class _QrReader extends State<QrReader> with TickerProviderStateMixin {
   void initState() {
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 600));
-    Timer(Duration(milliseconds: 1500), () => _animationController.forward());
+    Timer(Duration(milliseconds: 1200), () => _animationController.forward());
 
     _earlyAnimationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
     Timer(
-        Duration(milliseconds: 800), () => _earlyAnimationController.forward());
+        Duration(milliseconds: 500), () => _earlyAnimationController.forward());
 
     super.initState();
   }
@@ -49,7 +49,7 @@ class _QrReader extends State<QrReader> with TickerProviderStateMixin {
         children: [
           Stack(children: [
             Positioned(
-              top: 150,
+              top: 100,
               child: CameraSlide(
                 animationController: _earlyAnimationController,
                 cameraController: cameraController,
@@ -69,7 +69,7 @@ class _QrReader extends State<QrReader> with TickerProviderStateMixin {
             //     src: 'assets/splashShortUpsideDown.svg',),
             // ),
             Positioned(
-              top: -400,
+              top: - MediaQuery.of(context).size.height / 1.7,
               child: SplashBackground(
                 animationController: _animationController,
                 src: 'assets/splashRedUpsideDown.svg',
@@ -156,7 +156,7 @@ class CameraSlide extends StatelessWidget {
         end: Offset.zero,
       ).animate(animationController),
       child: SizedBox(
-        height: 750,
+        height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: MobileScanner(
           allowDuplicates: false,

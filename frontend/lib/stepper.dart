@@ -251,7 +251,7 @@ class _OrderStepperState extends State<OrderStepper>
       case "arrived":
         print("[Client] Statusupdate received: $message.");
         Timer(
-            const Duration(milliseconds: 1500),
+            const Duration(milliseconds: 100),
                 () => {
               _animationControllerOut2.forward(),
               setState(() {
@@ -260,18 +260,18 @@ class _OrderStepperState extends State<OrderStepper>
               })
             });
         Timer(
-            const Duration(milliseconds: 2000),
+            const Duration(milliseconds: 600),
                 () => {
               _animationControllerIn3.forward(),
             });
         Timer(
-            const Duration(milliseconds: 3000),
+            const Duration(milliseconds: 1500),
                 () => {
               setState(() {
                 state3 = OrderState.done;
               })
             });
-        Timer(const Duration(milliseconds: 5000),
+        Timer(const Duration(milliseconds: 4000),
                 () => {Navigator.of(context).push(createStepperRoute())});
         break;
     }
@@ -284,7 +284,9 @@ class _OrderStepperState extends State<OrderStepper>
 
   void start() async {
     // String serverIp = "10.7.43.4"; // Lea
-    String serverIp = "10.7.43.5"; // noassl
+    // String serverIp = "10.7.43.5"; // noassl
+
+    String serverIp = "192.168.178.33";
     int serverPort = 4567;
 
     final socket = await Socket.connect(serverIp, serverPort);
@@ -311,7 +313,7 @@ class _OrderStepperState extends State<OrderStepper>
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           const Manual(),
-      transitionDuration: const Duration(milliseconds: 1500),
+      transitionDuration: const Duration(milliseconds: 2000),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
