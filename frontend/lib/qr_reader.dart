@@ -69,7 +69,7 @@ class _QrReader extends State<QrReader> with TickerProviderStateMixin {
             //     src: 'assets/splashShortUpsideDown.svg',),
             // ),
             Positioned(
-              top: - MediaQuery.of(context).size.height / 1.7,
+              top: -MediaQuery.of(context).size.height / 1.7,
               child: SplashBackground(
                 animationController: _animationController,
                 src: 'assets/splashRedUpsideDown.svg',
@@ -100,6 +100,20 @@ class _QrReader extends State<QrReader> with TickerProviderStateMixin {
                       },
                       icon: Icon(Icons.flash_on, color: filliRed),
                       iconSize: 32,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DinoApp(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Skip QR Code",
+                      style: TextStyle(color: filliRed),
                     ),
                   ),
                 ],
@@ -167,7 +181,8 @@ class CameraSlide extends StatelessWidget {
             } else {
               final String code = barcode.rawValue!;
               if (code == "d2F0ZXJieXRlIGJlc3Rl") {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const DinoApp()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const DinoApp()));
               }
               debugPrint('Barcode found! $code');
             }
